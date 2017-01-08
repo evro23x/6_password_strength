@@ -1,9 +1,17 @@
 import re
 import sys
+from getpass import getpass
 from blacklist import bad_pass
 
 TWO_POINTS = 2
 ZERO_POINTS = 0
+
+
+def input_password():
+    password = getpass('Введите пароль: ')
+    if not password:
+        sys.exit('Пароль не может быть пустым')
+    return password
 
 
 def check_upper_case(password):
@@ -30,15 +38,15 @@ def check_len(password):
 
 
 def get_password_strength(password):
-    score = 0
-    score += check_upper_case(password)
-    score += check_digits(password)
-    score += check_special_characters(password)
-    score += check_blacklist(password)
-    score += check_len(password)
-    return score
+    strength = 0
+    strength += check_upper_case(password)
+    strength += check_digits(password)
+    strength += check_special_characters(password)
+    strength += check_blacklist(password)
+    strength += check_len(password)
+    return strength
 
 
 if __name__ == '__main__':
-    passwd = sys.argv[1]
+    passwd = input_password()
     print("Сложность пароля: %s" % get_password_strength(passwd))

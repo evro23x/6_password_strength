@@ -8,23 +8,14 @@ Cкрипт просит ввести пароль и выдаёт ему оце
 Пример запуска скрипта в среде Linux, под Python 3.5:
 
 ```#!bash
-$ python password_strength.py <password>
+$ python password_strength.py
 ```
 # Example
 
 ```#!bash
 
-$ python password_strength.py star
-Сложность пароля: 0
-$ python password_strength.py starr
-Сложность пароля: 2
-$ python password_strength.py starrrrr
-Сложность пароля: 4
-$ python password_strength.py starrrrr1
-Сложность пароля: 6
-$ python password_strength.py starrrrr1@
-Сложность пароля: 8
-$ python password_strength.py sTArrrrr1@
+$ python password_strength.py
+Введите пароль:
 Сложность пароля: 10
 ```
 
