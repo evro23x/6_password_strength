@@ -1,52 +1,48 @@
 import re
-import sys
 from getpass import getpass
 from blacklist import bad_pass
 
-TWO_POINTS = 2
+ONE_POINT = 1
 ZERO_POINTS = 0
-
-
-def input_password():
-    password = getpass('Введите пароль: ')
-    if not password:
-        sys.exit('Пароль не может быть пустым')
-    return password
+MIN_LEN_PASS = 6
+MAX_POINT = 10
 
 
 def check_upper_case(password):
-    return TWO_POINTS if not password == password.lower() else ZERO_POINTS
+    return ONE_POINT if not password == password.lower() else ZERO_POINTS
 
 
 def check_digits(password):
-    return TWO_POINTS if re.findall('\d+', password) else ZERO_POINTS
+    return ONE_POINT if re.findall('\d+', password) else ZERO_POINTS
 
 
 def check_special_characters(password):
-    for special_characters in "!@#$%^&*()":
-        if special_characters in password:
-            return TWO_POINTS
-    return ZERO_POINTS
+    return ONE_POINT if re.search('[!@#$%^&*()]', password) else ZERO_POINTS
 
 
 def check_blacklist(password):
-    return ZERO_POINTS if password in bad_pass else TWO_POINTS
+    return ONE_POINT if password not in bad_pass else ZERO_POINTS
 
 
 def check_len(password):
-    return TWO_POINTS if len(password) > 6 else ZERO_POINTS
+    return ONE_POINT if len(password) > MIN_LEN_PASS else ZERO_POINTS
+
+
+def check_repeating_symbols(password):
+    return ONE_POINT if max([password.count(symbol) for symbol in password]) < 3 else ZERO_POINTS
 
 
 def get_password_strength(password):
-    strength = 0
-    strength += check_upper_case(password)
-    strength += check_digits(password)
-    strength += check_special_characters(password)
-    strength += check_blacklist(password)
-    strength += check_len(password)
-    return strength
+    checks = {check_upper_case,
+              check_digits,
+              check_special_characters,
+              check_blacklist,
+              check_len,
+              check_repeating_symbols}
+    check_cost = MAX_POINT / len(checks)
+    return int(check_cost * sum([1 if check(password) else 0 for check in checks]))
 
 
 if __name__ == '__main__':
-    passwd = input_password()
-    print("Сложность пароля: %s" % get_password_strength(passwd))
+    user_password = getpass('Введите пароль: ')
+    print("Сложность пароля: {}".format(get_password_strength(user_password)))
