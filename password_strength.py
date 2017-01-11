@@ -2,34 +2,32 @@ import re
 from getpass import getpass
 from blacklist import bad_pass
 
-ONE_POINT = 1
-ZERO_POINTS = 0
 MIN_LEN_PASS = 6
 MAX_POINT = 10
 
 
 def check_upper_case(password):
-    return ONE_POINT if not password == password.lower() else ZERO_POINTS
+    return bool(password != password.lower())
 
 
 def check_digits(password):
-    return ONE_POINT if re.findall('\d+', password) else ZERO_POINTS
+    return bool(re.findall('\d+', password))
 
 
 def check_special_characters(password):
-    return ONE_POINT if re.search('[!@#$%^&*()]', password) else ZERO_POINTS
+    return bool(re.search('[!@#$%^&*()]', password))
 
 
 def check_blacklist(password):
-    return ONE_POINT if password not in bad_pass else ZERO_POINTS
+    return bool(password not in bad_pass)
 
 
 def check_len(password):
-    return ONE_POINT if len(password) > MIN_LEN_PASS else ZERO_POINTS
+    return bool(len(password) > MIN_LEN_PASS)
 
 
 def check_repeating_symbols(password):
-    return ONE_POINT if max([password.count(symbol) for symbol in password]) < 3 else ZERO_POINTS
+    return bool(max([password.count(symbol) for symbol in password]) < 3)
 
 
 def get_password_strength(password):
